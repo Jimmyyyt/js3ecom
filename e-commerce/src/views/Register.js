@@ -1,24 +1,32 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { signin } from '../store/actions/userActions';
+import { register } from '../store/actions/userActions';
 
-const Signin = (props) => {
+const Register = (props) => {
 
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const redirect = props.location.search
     ? props.location.search.split('=')[1]
     : '/';
 
-  const userSignin = useSelector((state) => state.userSignin);
-  const { userInfo } = userSignin;
+  const userRegister = useSelector((state) => state.userRegister);
+  const { userInfo } = userRegister;
 
   const dispatch = useDispatch();
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(signin(email, password));
+    if(password !== confirmPassword) {
+      alert('Password and confirm password are not match')
+    } else {
+
+      dispatch(register(firstName, lastName, email, password));
+    }
   };
   useEffect(() => {
     if (userInfo) {
@@ -30,7 +38,7 @@ const Signin = (props) => {
     <div>
     <form className="form" onSubmit={submitHandler}>
       <div>
-        <h1>Sign In</h1>
+        <h1>Create Account</h1>
       </div>
 
       <div>
@@ -40,7 +48,7 @@ const Signin = (props) => {
           id="firstName"
           placeholder="Enter First Name"
           required
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setFirstName(e.target.value)}
         ></input>
         <label htmlFor="lastName">Last Name</label>
         <input
@@ -48,7 +56,7 @@ const Signin = (props) => {
           id="lastName"
           placeholder="Enter Last Name"
           required
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setLastName(e.target.value)}
         ></input>
         <label htmlFor="email">Email address</label>
         <input
@@ -70,15 +78,25 @@ const Signin = (props) => {
         ></input>
       </div>
       <div>
+        <label htmlFor="confirmPassword">Confirm Password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Enter confirm password"
+          required
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        ></input>
+      </div>
+      <div>
         <label />
         <button className="primary" type="submit">
-          Sign In
+          Register
         </button>
       </div>
       <div>
         <label />
         <div>
-          New customer? {' '} <Link to={`/register?redirect=${redirect}`}>Create your account</Link>
+          Already have an account?{' '} <Link to={`/signin?redirect=${redirect}`}>Sign-In</Link>
         </div>
       </div>
     </form>
@@ -86,4 +104,4 @@ const Signin = (props) => {
   )
 }
 
-export default Signin
+export default Register

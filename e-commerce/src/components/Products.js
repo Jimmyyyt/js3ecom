@@ -16,6 +16,7 @@ const Products = (props) => {
           <Link to={`/product/${product._id}`}>
             <h2>{product.name}</h2>
           </Link>
+            
           <Rating
             rating={product.rating}
             numReviews={product.numReviews}
